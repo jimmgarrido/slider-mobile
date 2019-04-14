@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:views="using:GOES.Views"
+             x:Class="GOES.MainPage">
+    <TabbedPage.Children>
+        <NavigationPage Title="Image">
+            <x:Arguments>
+                <views:StaticImagePage/>
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Slider">
+            <x:Arguments>
+                <views:SliderPage />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+</TabbedPage>
