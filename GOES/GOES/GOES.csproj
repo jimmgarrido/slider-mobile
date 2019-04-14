@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.2" />
     <PackageReference Include="Xamarin.Forms" Version="4.0.0.62955-pre2" />
     <PackageReference Include="Xamarin.Forms.PinchZoomImage" Version="1.0.0" />  
   </ItemGroup>
