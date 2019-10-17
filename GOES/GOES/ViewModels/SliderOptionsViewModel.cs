@@ -34,12 +34,31 @@ namespace GOES.ViewModels
             }
         }
 
+        List<string> sectors;
+        public List<string> Sectors
+        {
+            get => sectors;
+            set => sectors = value;
+        }
+
+        List<string> products;
+        public List<string> Products
+        {
+            get => products;
+            set => products = value;
+        }
+
         HttpClient client;
 
         public SliderOptionsViewModel()
         {
             Satellites = new List<string> { "GOES-16", "GOES-17", "Himawari-8", "JPSS" };
             SatelliteIndex = 1;
+
+            Sectors = new List<string> { "Disk", "CONUS", "Mesoscale 1", "Mesoscale 2" };
+
+            Products = new List<string> { "Band 1", "Band 2"};
+
 
             client = new HttpClient();
             LoadData();

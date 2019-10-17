@@ -17,12 +17,13 @@
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
-        <StackLayout VerticalOptions="Center">
-            <Label Text="{Binding ModifiedDate, Converter={StaticResource DateTimeConverter}, Mode=OneWay}" HorizontalOptions="Center" />
-            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        <StackLayout VerticalOptions="FillAndExpand">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="CenterAndExpand" />
             <p:PinchZoom>
-                <Image x:Name="ImageView" VerticalOptions="Center" HorizontalOptions="Center" Aspect="AspectFit" />
+                <Image x:Name="ImageView" HorizontalOptions="Center" Aspect="AspectFit" />
             </p:PinchZoom>
+            <Label Text="{Binding ModifiedDate, Converter={StaticResource DateTimeConverter}, Mode=OneWay}" 
+                   FontSize="Medium" VerticalOptions="EndAndExpand" HorizontalOptions="Center" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

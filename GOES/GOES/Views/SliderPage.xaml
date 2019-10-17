@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GOES.Views.SliderPage"
              xmlns:vm="clr-namespace:GOES.ViewModels"
-             Title="Slider">
+             Title="RAMMB Slider">
     
     <ContentPage.BindingContext>
         <vm:SliderViewModel />
@@ -11,7 +11,6 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Refresh" Clicked="ToolbarItem_Clicked"/>
-        <ToolbarItem Text="Options" Clicked="OptionsClicked"/>
     </ContentPage.ToolbarItems>
     
     <ContentPage.Resources>
@@ -19,9 +18,34 @@
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Accent">#96d1ff</Color>
             <Color x:Key="LightTextColor">#999999</Color>
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <WebView x:Name="WebContainer" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+    <StackLayout>
+        <WebView x:Name="WebContainer" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+        <Grid Padding="15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            
+            <Button Text="Pause" Clicked="PlayPausedClicked" Grid.Row="0" Grid.Column="0"/>
+            <Button Text="Zoom Out" Clicked="ZoomOutClicked" Grid.Row="0" Grid.Column="2"/>
+            <Button Text="Zoom In" Clicked="ZoomInClicked" Grid.Row="0" Grid.Column="4"/>
+
+            <Button Text="Options" Clicked="OptionsClicked" Grid.Row="2" Grid.ColumnSpan="5"/>
+        </Grid>
+    </StackLayout>
 </ContentPage>
