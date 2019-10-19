@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using GOES.Models;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,27 +11,44 @@ namespace GOES.ViewModels
 {
     internal class SliderOptionsViewModel : BaseViewModel
     {
-        List<string> satellites;
+        public Dictionary<string, string> AllSatellites = new Dictionary<string, string>
+        {
+            {"goes-16","GOES-16" },
+            {"goes-17","GOES-17" },
+            {"himawari","Himawari-8" },
+            {"jpss", "JPSS" }
+        };
+
+        public Dictionary<string, string> AllSectors = new Dictionary<string, string>
+        {
+            {"full_disk","Full Disk" },
+            {"conus","CONUS" },
+            {"mesoscale_01","Mesoscale 1" },
+            {"mesoscale_02", "Mesoscale 2" },
+            {"japan", "Japan" }
+        };
+
         public List<string> Satellites
         {
-            get {
-                return satellites;
-            }
-            set {
-                satellites = value;
+            get
+            {
+                return AllSatellites.Values.ToList();
             }
         }
 
         int satelliteIndex;
-        public int SatelliteIndex
-        {
+        public int SatelliteIndex {
             get
             {
                 return satelliteIndex;
             }
             set
             {
+                if (satelliteIndex == value)
+                    return;
+
                 satelliteIndex = value;
+                OnPropertyChanged();
             }
         }
 
@@ -38,7 +56,26 @@ namespace GOES.ViewModels
         public List<string> Sectors
         {
             get => sectors;
-            set => sectors = value;
+            set
+            {
+                sectors = value;
+                OnPropertyChanged();
+                SectorIndex = 0;
+            }
+        }
+
+        int sectorIndex;
+        public int SectorIndex
+        {
+            get
+            {
+                return sectorIndex;
+            }
+            set
+            {
+                sectorIndex = value;
+                OnPropertyChanged();
+            }
         }
 
         List<string> products;
@@ -52,35 +89,25 @@ namespace GOES.ViewModels
 
         public SliderOptionsViewModel()
         {
-            Satellites = new List<string> { "GOES-16", "GOES-17", "Himawari-8", "JPSS" };
-            SatelliteIndex = 1;
+            //SatelliteIndex = 0;
+            //Satellites = new List<Satellite>
+            //{
+            //    new Satellite {Index = "goes-16", Label = "GOES-16" },
+            //    new Satellite {Index = "goes-17", Label = "GOES-17" },
+            //    new Satellite {Index = "himawari", Label = "Himawari-8" },
+            //    new Satellite {Index = "jpss", Label = "JPSS" }
+            //};
 
-            Sectors = new List<string> { "Disk", "CONUS", "Mesoscale 1", "Mesoscale 2" };
+            //Sectors = new List<string> { "Disk", "CONUS", "Mesoscale 1", "Mesoscale 2" };
 
             Products = new List<string> { "Band 1", "Band 2"};
 
 
             client = new HttpClient();
-            LoadData();
-            OnPropertyChanged("Satellites");
+            //LoadData();
+            //OnPropertyChanged("Satellites");
         }
 
-        async void LoadData()
-        {
-            var html = await client.GetStringAsync("http://rammb-slider.cira.colostate.edu/?sat=goes-17&z=3&im=12&ts=1&st=0&et=0&speed=130&motion=loop&map=0&lat=0&opacity%5B0%5D=1&hidden%5B0%5D=0&pause=0&slider=-1&hide_controls=1&mouse_draw=0&follow_feature=0&follow_hide=0&s=rammb-slider&sec=conus&p%5B0%5D=geocolor&x=7448.6796875&y=3745");
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            var selectNodes = doc.DocumentNode.SelectSingleNode("//body").ChildNodes
-                .First(n => n.Id == "pluginWrapper").ChildNodes
-                .First(n => n.Id == "controlWrapper").ChildNodes
-                .First(n => n.Id == "productSelectorHolder").Elements("select");
-
-            foreach(var satNode in selectNodes.First(n => n.Id == "satelliteSelectorChange").Elements("option"))
-            {
-                Satellites.Add(satNode.InnerText);
-            }
-
-        }
+        
     }
 }

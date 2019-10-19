@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
@@ -91,7 +90,7 @@
   <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\GOES\GOES.csproj">
-      <Project>{261381CB-76A4-4C66-9FAF-42CD1D2BB41A}</Project>
+      <Project>{E0E4B5A9-B0C7-4EB4-9830-9649E0CA65D7}</Project>
       <Name>GOES</Name>
     </ProjectReference>
   </ItemGroup>

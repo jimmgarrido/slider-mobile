@@ -8,12 +8,13 @@
         <StackLayout Spacing="20" Padding="15">
             <StackLayout Spacing="0">
                 <Label Text="Satellite"/>
-                <Picker Title="Satellite" ItemsSource="{Binding Satellites}" SelectedIndex="{Binding SatelliteIndex}"/>
+                <Picker Title="Satellite" ItemsSource="{Binding Satellites}" SelectedIndex="{Binding SatelliteIndex, Mode=TwoWay}"
+                        SelectedIndexChanged="Picker_SelectedIndexChanged" />
             </StackLayout>
 
             <StackLayout Spacing="0">
                 <Label Text="Sector"/>
-                <Picker Title="Sector" ItemsSource="{Binding Sectors}" />
+                <Picker Title="Sector" ItemsSource="{Binding Sectors}" SelectedIndex="{Binding SectorIndex, Mode=TwoWay}" />
             </StackLayout>
 
             <StackLayout Spacing="0">

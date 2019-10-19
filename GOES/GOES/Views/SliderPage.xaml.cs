@@ -23,7 +23,7 @@ namespace GOES.Views
 
         private async void OptionsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new SliderOptionsPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new SliderOptionsPage(WebContainer)));
         }
 
         async void ZoomOutClicked(object sender, EventArgs e)
