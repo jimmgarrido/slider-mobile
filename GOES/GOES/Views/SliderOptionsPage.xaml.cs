@@ -14,74 +14,70 @@ namespace GOES.Views
 {
     public partial class SliderOptionsPage : ContentPage
     {
-        WebView WebContainer;
-        SliderOptionsViewModel ViewModel => BindingContext as SliderOptionsViewModel;
+        SliderOptionsViewModel ViewModel
+        {
+            get => BindingContext as SliderOptionsViewModel;
+            set => BindingContext = value;
+        }
+
+        WebView webContainer;
         bool loading = true;
 
         public SliderOptionsPage(WebView container)
         {
             InitializeComponent();
+            webContainer = container;
 
-            WebContainer = container;
-            BindingContext = new SliderOptionsViewModel();
+            ViewModel = new SliderOptionsViewModel();
 
-            LoadInitialData();
+            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SatelliteChanged", (sender) => SatelliteChanged());
+            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SectorChanged", (sender) => SectorChanged());
+            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "ProductChanged", (sender => ProductChanged()));
         }
 
-        async void LoadInitialData()
+        protected async override void OnAppearing()
         {
-            loading = true;
+            var selectedSatellite = await webContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
+            var selectedSector = await webContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
+            var selectedProduct = await webContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
 
-            await WebContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[disabled=""disabled""]').remove();");
-            var test = await WebContainer.EvaluateJavaScriptAsync(@"$(""#satelliteSelectorChange>option"").map(function() { return $(this).val(); }).get();");
-            Debug.WriteLine(test);
-
-            var selected = await WebContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
-            Debug.WriteLine($"*** {selected} **");
-
-            var label = ViewModel.AllSatellites[selected];
-            var index = ViewModel.Satellites.IndexOf(label);
-            ViewModel.SatelliteIndex = index;
-
-
-            //Get Sectors
-            await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[disabled=""disabled""]').remove();");
-            var sectorJson = await WebContainer.EvaluateJavaScriptAsync(@"$(""#sectorSelectorChange>option"").map(function() { return $(this).val(); }).get();");
-            sectorJson.Replace('[', '{');
-            sectorJson.Replace(']', '}');
-
-            var sectors = JsonConvert.DeserializeObject<List<string>>(sectorJson);
-            ViewModel.Sectors = sectors;
-
-            loading = false;
+            ViewModel.LoadInitialData(selectedSatellite, selectedSector, selectedProduct);
         }
 
         async void Save_Clicked(object sender, EventArgs e)
         {
-            await WebContainer.EvaluateJavaScriptAsync("location.reload();");
+            if (ViewModel.HasChanged)
+                await webContainer.EvaluateJavaScriptAsync("location.reload();");
+
             await Navigation.PopModalAsync();
         }
 
-        async void Picker_SelectedIndexChanged(System.Object sender, System.EventArgs e)
+        async void SatelliteChanged()
         {
-            if (loading)
-                return;
+            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.sat = ""{ViewModel.CurrentSatellite.Id}"";");
+            await webContainer.EvaluateJavaScriptAsync(@"updateURL(1);");
+        }
 
-            var select = ViewModel.Satellites[ViewModel.SatelliteIndex];
-            var sat = ViewModel.AllSatellites.First(s => s.Value == select).Key;
+        async void SectorChanged()
+        {
+            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.sec = ""{ViewModel.CurrentSatellite.Sectors[ViewModel.SectorIndex].Id}"";");
+            await webContainer.EvaluateJavaScriptAsync(@"updateURL(0,1);");
+        }
 
-            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.sat = ""{sat}"";");
-            await WebContainer.EvaluateJavaScriptAsync(@"updateURL(1);");
-            await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option').remove();");
-            await WebContainer.EvaluateJavaScriptAsync(@"$.each(json.satellites[url_parameters.sat].sectors, function(e, t) {e != url_parameters.sec ? $(""#sectorSelectorChange"").append(""<option value='"" + e + ""'>"" + t.sector_title + ""</option>"") : $(""#sectorSelectorChange"").append("" <option selected='true' value='"" + e + ""'>"" + t.sector_title + ""</option>"")});");
-            var test = await WebContainer.EvaluateJavaScriptAsync(@"$(""#sectorSelectorChange>option"").map(function() { return $(this).val(); }).get();");
+        async void ProductChanged()
+        {
+            var test = $@"url_parameters.p = {{0:{ViewModel.CurrentSatellite.Products[ViewModel.ProductIndex].Id}}}"";";
             Debug.WriteLine(test);
+            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.p = {{0:""{ViewModel.CurrentSatellite.Products[ViewModel.ProductIndex].Id}""}};");
+            await webContainer.EvaluateJavaScriptAsync(@"updateURL(0,0,1);");
+        }
 
-            test.Replace('[','{');
-            test.Replace(']', '}');
+        async void CloseBtnClicked(System.Object sender, System.EventArgs e)
+        {
+            if(ViewModel.HasChanged)
+                await webContainer.EvaluateJavaScriptAsync("location.reload();");
 
-            var sats = JsonConvert.DeserializeObject<List<string>>(test);
-            ViewModel.Sectors = sats;
+            await Navigation.PopModalAsync();
         }
     }
 }
