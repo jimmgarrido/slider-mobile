@@ -15,7 +15,7 @@ namespace GOES
             if (Device.RuntimePlatform == Device.UWP)
                 MainPage = new MainPage();
             else
-                MainPage = new AppShell();
+                MainPage = new NavigationPage(new SliderPage());
         }
 
         protected override void OnStart()

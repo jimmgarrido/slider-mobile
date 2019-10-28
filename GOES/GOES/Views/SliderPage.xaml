@@ -39,11 +39,12 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="15"/>
             </Grid.RowDefinitions>
             
             <Button Text="Pause" Clicked="PlayPausedClicked" Grid.Row="0" Grid.Column="0"/>
-            <Button Text="Zoom Out" Clicked="ZoomOutClicked" Grid.Row="0" Grid.Column="2"/>
-            <Button Text="Zoom In" Clicked="ZoomInClicked" Grid.Row="0" Grid.Column="4"/>
+            <Button Text="Zoom In" Clicked="ZoomInClicked" Grid.Row="0" Grid.Column="2"/>
+            <Button Text="Zoom Out" Clicked="ZoomOutClicked" Grid.Row="0" Grid.Column="4"/>
 
             <Button Text="Options" Clicked="OptionsClicked" Grid.Row="2" Grid.ColumnSpan="5"/>
         </Grid>

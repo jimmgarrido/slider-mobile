@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,7 +22,7 @@ namespace GOES.Views
 
         private async void OptionsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new SliderOptionsPage(WebContainer)));
+            await Navigation.PushModalAsync(new SliderOptionsPage(WebContainer));
         }
 
         async void ZoomOutClicked(object sender, EventArgs e)

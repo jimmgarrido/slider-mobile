@@ -62,7 +62,7 @@ namespace GOES.ViewModels
                 if (!isLoading && sectorIndex >= 0)
                 {
                     MessagingCenter.Send(this, "SectorChanged");
-                    ProductIndex = -1;
+                    //ProductIndex = -1;
                     HasChanged = true;
                 }
             }
@@ -88,12 +88,34 @@ namespace GOES.ViewModels
             }
         }
 
+        List<int> imageCount;
+        public List<int> ImageCount { get; set; }
+
+        int imageCountIndex;
+        public int ImageCountIndex
+        {
+            get => imageCountIndex;
+            set
+            {
+                imageCountIndex = value;
+                OnPropertyChanged();
+
+                if (!isLoading && imageCountIndex >= 0)
+                {
+                    MessagingCenter.Send(this, "ImageCountChanged");
+                    HasChanged = true;
+                }
+            }
+        }
+
         public bool HasChanged { get; set; }
 
         bool isLoading = true;
 
         public SliderOptionsViewModel()
         {
+            ImageCount = new List<int> { 6, 12, 14, 18, 24, 28, 30, 36, 42, 48, 54, 56, 60 };
+
             AllSatellites = new List<Satellite>
             {
                 new Satellite
@@ -109,56 +131,41 @@ namespace GOES.ViewModels
                     },
                     Products = new List<Product>
                     {
-                        new Product { Id = "band_01", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_02", Name = @"Band 1 (""Red"")" },
-                        new Product { Id = "band_03", Name = @"Band 1 (""Veggie"")" },
-                        new Product { Id = "band_04", Name = @"Band 1 (""Cirrus"")" },
-                        new Product { Id = "band_05", Name = @"Band 1 (""Snow/Ice"")" },
-                        new Product { Id = "band_06", Name = @"Band 1 (""Cloud Particle Size"")" },
-                        new Product { Id = "band_07", Name = @"Band 1 (""Shortwave Window"")" },
-                        new Product { Id = "band_08", Name = @"Band 1 (""Upper Level Tropospheric Water Vapor"")" },
-                        new Product { Id = "band_09", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_10", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_11", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_12", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_13", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_14", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_15", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_16", Name = @"Band 1 (""Blue"")" },
+                        new Product { Id = "band_01", Name = @"Band 1 (Blue)" },
+                        new Product { Id = "band_02", Name = @"Band 2 (Red)" },
+                        new Product { Id = "band_03", Name = @"Band 3 (Veggie)" },
+                        new Product { Id = "band_04", Name = @"Band 4 (Cirrus)" },
+                        new Product { Id = "band_05", Name = @"Band 5 (Snow/Ice)" },
+                        new Product { Id = "band_06", Name = @"Band 6 (Cloud Particle Size)" },
+                        new Product { Id = "band_07", Name = @"Band 7 (Shortwave Window)" },
+                        new Product { Id = "band_08", Name = @"Band 8 (Upper Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_09", Name = @"Band 9 (Mid-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_10", Name = @"Band 10 (Lower-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_11", Name = @"Band 11 (Cloud-Top Phase)" },
+                        new Product { Id = "band_12", Name = @"Band 12 (Ozone)" },
+                        new Product { Id = "band_13", Name = @"Band 13 (""Clean"" IR Longwave Window)" },
+                        new Product { Id = "band_14", Name = @"Band 14 (IR Longwave Window)" },
+                        new Product { Id = "band_15", Name = @"Band 15 (""Dirty"" Longwave Window)" },
+                        new Product { Id = "band_16", Name = @"Band 16 (""CO2"" Longwave Window)" },
                         new Product { Id = "geocolor", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "natural_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "rgb_air_mass", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "awips_dust", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "fire_temperature", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "shortwave_albedo_cira", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_natural_fire_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "eumetsat_ash", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_energy", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_counts", Name = @"GeoColor (CIRA)" },
+                        new Product { Id = "shortwave_albedo_cira", Name = @"Shortwave Albedo (CIRA)" },
+                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"Snow/Cloud (CIRA)" },
+                        new Product { Id = "natural_color", Name = @"Snow/Cloud-Layers (CIRA)" },
+                        new Product { Id = "rgb_air_mass", Name = @"Airmass (EUMETSAT)" },
+                        new Product { Id = "awips_dust", Name = @"Dust (EUMETSAT)" },
+                        new Product { Id = "fire_temperature", Name = @"Fire Temperature (CIRA)" },
+                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"Cloud Geometric Thickness (CIRA/NOAA)" },
+                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"Cloud Layers (CIRA/NOAA)" },
+                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"Cloud-Top Height (NOAA)" },
+                        new Product { Id = "cira_natural_fire_color", Name = @"Natural Color-Fire (CIRA)" },
+                        new Product { Id = "eumetsat_ash", Name = @"Ash (EUMETSAT)" },
+                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"Cloud Optical Depth (NOAA)" },
+                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"Cloud-Top Effective Particle Size (NOAA)" },
+                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"Day Cloud Phase Distinction (JMA)" },
+                        new Product { Id = "cira_glm_l2_group_energy", Name = @"Group Energy Density (CIRA)" },
+                        new Product { Id = "cira_glm_l2_group_counts", Name = @"Group Flash Count Density (CIRA)" },
                         new Product { Id = "cira_cloud_snow_discriminator", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_high_low_cloud_and_snow", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "split_window_difference_10_3-12_3", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_dust_debra_original_cloud_mask", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_merged_base_reflectivity_qc", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_reflectivity_at_lowest_altitude", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_radar_precipitation_accumulation_01-hour", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_lightning_probability_0-30-min_nldn", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_cg_lightning_density_5-min_nldn", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_precip_flag", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "mrms_radar_precipitation_rate", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_dust_debra_cloud_cleared_background", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_dust_debra_clavr-x_cloud_mask", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "eumetsat_dust", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_proxy_visible", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_low_cloud_night", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_low_cloud_night_cloud_cleared_background", Name = @"GeoColor (CIRA)" }
+                        new Product { Id = "cira_high_low_cloud_and_snow", Name = @"GeoColor (CIRA)" }
                     }
                 },
                 new Satellite
@@ -174,39 +181,39 @@ namespace GOES.ViewModels
                     },
                     Products = new List<Product>
                     {
-                        new Product { Id = "band_01", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_02", Name = @"Band 1 (""Red"")" },
-                        new Product { Id = "band_03", Name = @"Band 1 (""Veggie"")" },
-                        new Product { Id = "band_04", Name = @"Band 1 (""Cirrus"")" },
-                        new Product { Id = "band_05", Name = @"Band 1 (""Snow/Ice"")" },
-                        new Product { Id = "band_06", Name = @"Band 1 (""Cloud Particle Size"")" },
-                        new Product { Id = "band_07", Name = @"Band 1 (""Shortwave Window"")" },
-                        new Product { Id = "band_08", Name = @"Band 1 (""Upper Level Tropospheric Water Vapor"")" },
-                        new Product { Id = "band_09", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_10", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_11", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_12", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_13", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_14", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_15", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_16", Name = @"Band 1 (""Blue"")" },
+                        new Product { Id = "band_01", Name = @"Band 1 (Blue)" },
+                        new Product { Id = "band_02", Name = @"Band 2 (Red)" },
+                        new Product { Id = "band_03", Name = @"Band 3 (Veggie)" },
+                        new Product { Id = "band_04", Name = @"Band 4 (Cirrus)" },
+                        new Product { Id = "band_05", Name = @"Band 5 (Snow/Ice)" },
+                        new Product { Id = "band_06", Name = @"Band 6 (Cloud Particle Size)" },
+                        new Product { Id = "band_07", Name = @"Band 7 (Shortwave Window)" },
+                        new Product { Id = "band_08", Name = @"Band 8 (Upper Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_09", Name = @"Band 9 (Mid-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_10", Name = @"Band 10 (Lower-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_11", Name = @"Band 11 (Cloud-Top Phase)" },
+                        new Product { Id = "band_12", Name = @"Band 12 (Ozone)" },
+                        new Product { Id = "band_13", Name = @"Band 13 (""Clean"" IR Longwave Window)" },
+                        new Product { Id = "band_14", Name = @"Band 14 (IR Longwave Window)" },
+                        new Product { Id = "band_15", Name = @"Band 15 (""Dirty"" Longwave Window)" },
+                        new Product { Id = "band_16", Name = @"Band 16 (""CO2"" Longwave Window)" },
                         new Product { Id = "geocolor", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "natural_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "rgb_air_mass", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "awips_dust", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "fire_temperature", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "shortwave_albedo_cira", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_natural_fire_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "eumetsat_ash", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_energy", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_counts", Name = @"GeoColor (CIRA)" },
+                        new Product { Id = "shortwave_albedo_cira", Name = @"Shortwave Albedo (CIRA)" },
+                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"Snow/Cloud (CIRA)" },
+                        new Product { Id = "natural_color", Name = @"Snow/Cloud-Layers (CIRA)" },
+                        new Product { Id = "rgb_air_mass", Name = @"Airmass (EUMETSAT)" },
+                        new Product { Id = "awips_dust", Name = @"Dust (EUMETSAT)" },
+                        new Product { Id = "fire_temperature", Name = @"Fire Temperature (CIRA)" },
+                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"Cloud Geometric Thickness (CIRA/NOAA)" },
+                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"Cloud Layers (CIRA/NOAA)" },
+                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"Cloud-Top Height (NOAA)" },
+                        new Product { Id = "cira_natural_fire_color", Name = @"Natural Color-Fire (CIRA)" },
+                        new Product { Id = "eumetsat_ash", Name = @"Ash (EUMETSAT)" },
+                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"Cloud Optical Depth (NOAA)" },
+                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"Cloud-Top Effective Particle Size (NOAA)" },
+                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"Day Cloud Phase Distinction (JMA)" },
+                        new Product { Id = "cira_glm_l2_group_energy", Name = @"Group Energy Density (CIRA)" },
+                        new Product { Id = "cira_glm_l2_group_counts", Name = @"Group Flash Count Density (CIRA)" },
                         new Product { Id = "cira_cloud_snow_discriminator", Name = @"GeoColor (CIRA)" },
                         new Product { Id = "cira_high_low_cloud_and_snow", Name = @"GeoColor (CIRA)" }
                     }
@@ -223,39 +230,39 @@ namespace GOES.ViewModels
                     },
                     Products = new List<Product>
                     {
-                        new Product { Id = "band_01", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_02", Name = @"Band 1 (""Red"")" },
-                        new Product { Id = "band_03", Name = @"Band 1 (""Veggie"")" },
-                        new Product { Id = "band_04", Name = @"Band 1 (""Cirrus"")" },
-                        new Product { Id = "band_05", Name = @"Band 1 (""Snow/Ice"")" },
-                        new Product { Id = "band_06", Name = @"Band 1 (""Cloud Particle Size"")" },
-                        new Product { Id = "band_07", Name = @"Band 1 (""Shortwave Window"")" },
-                        new Product { Id = "band_08", Name = @"Band 1 (""Upper Level Tropospheric Water Vapor"")" },
-                        new Product { Id = "band_09", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_10", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_11", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_12", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_13", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_14", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_15", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_16", Name = @"Band 1 (""Blue"")" },
+                        new Product { Id = "band_01", Name = @"Band 1 (Blue)" },
+                        new Product { Id = "band_02", Name = @"Band 2 (Red)" },
+                        new Product { Id = "band_03", Name = @"Band 3 (Veggie)" },
+                        new Product { Id = "band_04", Name = @"Band 4 (Cirrus)" },
+                        new Product { Id = "band_05", Name = @"Band 5 (Snow/Ice)" },
+                        new Product { Id = "band_06", Name = @"Band 6 (Cloud Particle Size)" },
+                        new Product { Id = "band_07", Name = @"Band 7 (Shortwave Window)" },
+                        new Product { Id = "band_08", Name = @"Band 8 (Upper Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_09", Name = @"Band 9 (Mid-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_10", Name = @"Band 10 (Lower-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_11", Name = @"Band 11 (Cloud-Top Phase)" },
+                        new Product { Id = "band_12", Name = @"Band 12 (Ozone)" },
+                        new Product { Id = "band_13", Name = @"Band 13 (""Clean"" IR Longwave Window)" },
+                        new Product { Id = "band_14", Name = @"Band 14 (IR Longwave Window)" },
+                        new Product { Id = "band_15", Name = @"Band 15 (""Dirty"" Longwave Window)" },
+                        new Product { Id = "band_16", Name = @"Band 16 (""CO2"" Longwave Window)" },
                         new Product { Id = "geocolor", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "natural_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "rgb_air_mass", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "awips_dust", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "fire_temperature", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "shortwave_albedo_cira", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_natural_fire_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "eumetsat_ash", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_energy", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_counts", Name = @"GeoColor (CIRA)" },
+                        new Product { Id = "shortwave_albedo_cira", Name = @"Shortwave Albedo (CIRA)" },
+                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"Snow/Cloud (CIRA)" },
+                        new Product { Id = "natural_color", Name = @"Snow/Cloud-Layers (CIRA)" },
+                        new Product { Id = "rgb_air_mass", Name = @"Airmass (EUMETSAT)" },
+                        new Product { Id = "awips_dust", Name = @"Dust (EUMETSAT)" },
+                        new Product { Id = "fire_temperature", Name = @"Fire Temperature (CIRA)" },
+                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"Cloud Geometric Thickness (CIRA/NOAA)" },
+                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"Cloud Layers (CIRA/NOAA)" },
+                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"Cloud-Top Height (NOAA)" },
+                        new Product { Id = "cira_natural_fire_color", Name = @"Natural Color-Fire (CIRA)" },
+                        new Product { Id = "eumetsat_ash", Name = @"Ash (EUMETSAT)" },
+                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"Cloud Optical Depth (NOAA)" },
+                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"Cloud-Top Effective Particle Size (NOAA)" },
+                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"Day Cloud Phase Distinction (JMA)" },
+                        new Product { Id = "cira_glm_l2_group_energy", Name = @"Group Energy Density (CIRA)" },
+                        new Product { Id = "cira_glm_l2_group_counts", Name = @"Group Flash Count Density (CIRA)" },
                         new Product { Id = "cira_cloud_snow_discriminator", Name = @"GeoColor (CIRA)" },
                         new Product { Id = "cira_high_low_cloud_and_snow", Name = @"GeoColor (CIRA)" }
                     }
@@ -271,39 +278,39 @@ namespace GOES.ViewModels
                     },
                     Products = new List<Product>
                     {
-                        new Product { Id = "band_01", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_02", Name = @"Band 1 (""Red"")" },
-                        new Product { Id = "band_03", Name = @"Band 1 (""Veggie"")" },
-                        new Product { Id = "band_04", Name = @"Band 1 (""Cirrus"")" },
-                        new Product { Id = "band_05", Name = @"Band 1 (""Snow/Ice"")" },
-                        new Product { Id = "band_06", Name = @"Band 1 (""Cloud Particle Size"")" },
-                        new Product { Id = "band_07", Name = @"Band 1 (""Shortwave Window"")" },
-                        new Product { Id = "band_08", Name = @"Band 1 (""Upper Level Tropospheric Water Vapor"")" },
-                        new Product { Id = "band_09", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_10", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_11", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_12", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_13", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_14", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_15", Name = @"Band 1 (""Blue"")" },
-                        new Product { Id = "band_16", Name = @"Band 1 (""Blue"")" },
+                        new Product { Id = "band_01", Name = @"Band 1 (Blue)" },
+                        new Product { Id = "band_02", Name = @"Band 2 (Red)" },
+                        new Product { Id = "band_03", Name = @"Band 3 (Veggie)" },
+                        new Product { Id = "band_04", Name = @"Band 4 (Cirrus)" },
+                        new Product { Id = "band_05", Name = @"Band 5 (Snow/Ice)" },
+                        new Product { Id = "band_06", Name = @"Band 6 (Cloud Particle Size)" },
+                        new Product { Id = "band_07", Name = @"Band 7 (Shortwave Window)" },
+                        new Product { Id = "band_08", Name = @"Band 8 (Upper Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_09", Name = @"Band 9 (Mid-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_10", Name = @"Band 10 (Lower-Level Tropospheric Water Vapor)" },
+                        new Product { Id = "band_11", Name = @"Band 11 (Cloud-Top Phase)" },
+                        new Product { Id = "band_12", Name = @"Band 12 (Ozone)" },
+                        new Product { Id = "band_13", Name = @"Band 13 (""Clean"" IR Longwave Window)" },
+                        new Product { Id = "band_14", Name = @"Band 14 (IR Longwave Window)" },
+                        new Product { Id = "band_15", Name = @"Band 15 (""Dirty"" Longwave Window)" },
+                        new Product { Id = "band_16", Name = @"Band 16 (""CO2"" Longwave Window)" },
                         new Product { Id = "geocolor", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "natural_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "rgb_air_mass", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "awips_dust", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "fire_temperature", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "shortwave_albedo_cira", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_natural_fire_color", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "eumetsat_ash", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_energy", Name = @"GeoColor (CIRA)" },
-                        new Product { Id = "cira_glm_l2_group_counts", Name = @"GeoColor (CIRA)" },
+                        new Product { Id = "shortwave_albedo_cira", Name = @"Shortwave Albedo (CIRA)" },
+                        new Product { Id = "cira_snow-cloud_discriminator_rgb", Name = @"Snow/Cloud (CIRA)" },
+                        new Product { Id = "natural_color", Name = @"Snow/Cloud-Layers (CIRA)" },
+                        new Product { Id = "rgb_air_mass", Name = @"Airmass (EUMETSAT)" },
+                        new Product { Id = "awips_dust", Name = @"Dust (EUMETSAT)" },
+                        new Product { Id = "fire_temperature", Name = @"Fire Temperature (CIRA)" },
+                        new Product { Id = "cloud_geometric_thickness_cira_clavr-x", Name = @"Cloud Geometric Thickness (CIRA/NOAA)" },
+                        new Product { Id = "cloud_layers_cira_clavr-x", Name = @"Cloud Layers (CIRA/NOAA)" },
+                        new Product { Id = "cloud_top_height_cira_clavr-x", Name = @"Cloud-Top Height (NOAA)" },
+                        new Product { Id = "cira_natural_fire_color", Name = @"Natural Color-Fire (CIRA)" },
+                        new Product { Id = "eumetsat_ash", Name = @"Ash (EUMETSAT)" },
+                        new Product { Id = "cloud_optical_thickness_cira_clavr-x", Name = @"Cloud Optical Depth (NOAA)" },
+                        new Product { Id = "cloud_effective_radius_cira_clavr-x", Name = @"Cloud-Top Effective Particle Size (NOAA)" },
+                        new Product { Id = "jma_day_cloud_phase_distinction_rgb", Name = @"Day Cloud Phase Distinction (JMA)" },
+                        new Product { Id = "cira_glm_l2_group_energy", Name = @"Group Energy Density (CIRA)" },
+                        new Product { Id = "cira_glm_l2_group_counts", Name = @"Group Flash Count Density (CIRA)" },
                         new Product { Id = "cira_cloud_snow_discriminator", Name = @"GeoColor (CIRA)" },
                         new Product { Id = "cira_high_low_cloud_and_snow", Name = @"GeoColor (CIRA)" }
                     }
@@ -311,7 +318,6 @@ namespace GOES.ViewModels
             };
 
             HasChanged = false;
-
         }
 
         public void LoadInitialData(string satellite, string sector, string product)

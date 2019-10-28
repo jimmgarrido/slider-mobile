@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GOES.Models
@@ -16,7 +17,7 @@ namespace GOES.Models
 
         public Satellite()
         {
-
+            Debug.WriteLine("");
         }
     }
 

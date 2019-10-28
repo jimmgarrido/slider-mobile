@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              x:Class="GOES.Views.SliderOptionsPage"
-             Title="Options">
+             Title="Options"
+             ios:Page.ModalPresentationStyle="FormSheet">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Close" Clicked="CloseBtnClicked" />
@@ -11,34 +12,34 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
-            <StackLayout Spacing="0">
+            <StackLayout Spacing="5">
                 <Label Text="Satellite"/>
                 <Picker Title="Satellite" ItemsSource="{Binding AllSatellites}" ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding CurrentSatellite, Mode=TwoWay}" ios:Picker.UpdateMode="WhenFinished" />
             </StackLayout>
 
-            <StackLayout Spacing="0">
+            <StackLayout Spacing="5">
                 <Label Text="Sector"/>
                 <Picker Title="Sector" ItemsSource="{Binding CurrentSatellite.Sectors}" ItemDisplayBinding="{Binding Name}"
                         SelectedIndex="{Binding SectorIndex, Mode=TwoWay}" ios:Picker.UpdateMode="WhenFinished" />
             </StackLayout>
 
-            <StackLayout Spacing="0">
+            <StackLayout Spacing="5">
                 <Label Text="Product"/>
                 <Picker Title="Label" ItemsSource="{Binding CurrentSatellite.Products}" ItemDisplayBinding="{Binding Name}"
                         SelectedIndex="{Binding ProductIndex, Mode=TwoWay}" ios:Picker.UpdateMode="WhenFinished" />
             </StackLayout>
 
-            <StackLayout Spacing="0">
+            <StackLayout Spacing="5">
                 <Label Text="Num of Images"/>
-                <Picker Title="Num of Images" />
+                <Picker Title="Num of Images" ItemsSource="{Binding ImageCount}" SelectedIndex="{Binding ImageCountIndex}" />
             </StackLayout>
 
-            <StackLayout Spacing="0">
+            <StackLayout Spacing="5">
                 <Label Text="Time Step"/>
                 <Picker Title="Time Step" />
             </StackLayout>
-            <Button Text="Save" Clicked="Save_Clicked" VerticalOptions="EndAndExpand" BackgroundColor="LightGray" Margin="0,0,0,15"/>
+            <Button Text="Close" Clicked="Save_Clicked" VerticalOptions="EndAndExpand" BackgroundColor="LightGray" Margin="0,0,0,25"/>
         </StackLayout>
     </ContentPage.Content>
     
