@@ -35,6 +35,12 @@
                 <Label Text="Time Step"/>
                 <Picker Title="Time Step" />
             </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Map Outline" VerticalTextAlignment="Center"/>
+                <Switch IsToggled="{Binding IsMapEnabled}" />
+            </StackLayout>
+
             <Button Text="Close" Clicked="Save_Clicked" VerticalOptions="EndAndExpand" BackgroundColor="LightGray" Margin="0,0,0,25"/>
         </StackLayout>
     </ContentPage.Content>

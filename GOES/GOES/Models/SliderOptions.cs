@@ -10,6 +10,8 @@ namespace GOES.Models
 
         public string Product { get; set; }
 
+        public bool IsMapToggled { get; set; }
+
         public SliderOptions()
         {
         }

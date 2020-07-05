@@ -22,6 +22,7 @@ namespace GOES.Views
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SatelliteChanged", (sender, arg) => SatelliteChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SectorChanged", (sender, arg) => SectorChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "ProductChanged", (sender, arg) => ProductChanged(arg));
+            MessagingCenter.Subscribe<SliderOptionsViewModel, bool>(this, "MapToggled", (sender, arg) => MapToggled(arg));
         }
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)
@@ -29,12 +30,14 @@ namespace GOES.Views
             var selectedSatellite = await WebContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
             var selectedSector = await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
             var selectedProduct = await WebContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
+            var isMapToggled = await WebContainer.EvaluateJavaScriptAsync(@"$('#mapHideShow').prop('checked')");
 
             options = new SliderOptions
             {
                 Satellite = selectedSatellite,
                 Sector = selectedSector,
-                Product = selectedProduct
+                Product = selectedProduct,
+                IsMapToggled = bool.Parse(isMapToggled)
             };
         }
 
@@ -120,6 +123,11 @@ namespace GOES.Views
         {
             await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.p = {{0:""{product}""}};");
             await WebContainer.EvaluateJavaScriptAsync(@"updateURL(0,0,1);");
+        }
+
+        async void MapToggled(bool isEnabled)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"$(""#mapHideShow"").click()");
         }
     }
 }

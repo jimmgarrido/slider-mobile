@@ -108,6 +108,20 @@ namespace GOES.ViewModels
             }
         }
 
+        bool isMapEnabled;
+        public bool IsMapEnabled
+        {
+            get => isMapEnabled;
+            set
+            {
+                isMapEnabled = value;
+                OnPropertyChanged();
+
+                if(!isLoading)
+                    MessagingCenter.Send(this, "MapToggled", isMapEnabled);
+            }
+        }
+
         public bool HasChanged { get; set; }
 
         bool isLoading = true;
@@ -329,6 +343,8 @@ namespace GOES.ViewModels
             SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == options.Sector));
 
             ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == options.Product));
+
+            IsMapEnabled = options.IsMapToggled;
 
             isLoading = false;
         }
