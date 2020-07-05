@@ -82,5 +82,15 @@ namespace GOES.Views
             else
                 btn.Text = "Pause";
         }
+
+        async void PrevClicked(object sender, EventArgs e)
+        {
+            await WebContainer.EvaluateJavaScriptAsync(@"$(""#previous"").button().click()");
+        }
+
+        async void NextClicked(object sender, EventArgs e)
+        {
+            await WebContainer.EvaluateJavaScriptAsync(@"$(""#next"").button().click()");
+        }
     }
 }
