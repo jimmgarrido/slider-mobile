@@ -37,7 +37,7 @@ namespace GOES.ViewModels
 
                 if (!isLoading)
                 {
-                    MessagingCenter.Send(this, "SatelliteChanged");
+                    MessagingCenter.Send(this, "SatelliteChanged", currentSatellite.Id);
                     SectorIndex = -1;
                     HasChanged = true;
                 }
@@ -61,7 +61,7 @@ namespace GOES.ViewModels
 
                 if (!isLoading && sectorIndex >= 0)
                 {
-                    MessagingCenter.Send(this, "SectorChanged");
+                    MessagingCenter.Send(this, "SectorChanged", currentSatellite.Sectors[sectorIndex].Id);
                     //ProductIndex = -1;
                     HasChanged = true;
                 }
@@ -82,7 +82,7 @@ namespace GOES.ViewModels
 
                 if (!isLoading && productIndex >= 0)
                 {
-                    MessagingCenter.Send(this, "ProductChanged");
+                    MessagingCenter.Send(this, "ProductChanged", currentSatellite.Products[productIndex].Id);
                     HasChanged = true;
                 }
             }

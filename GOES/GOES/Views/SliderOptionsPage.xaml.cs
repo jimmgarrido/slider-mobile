@@ -30,44 +30,13 @@ namespace GOES.Views
 
             ViewModel = new SliderOptionsViewModel();
             ViewModel.LoadInitialData(options);
-
-            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SatelliteChanged", (sender) => SatelliteChanged());
-            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SectorChanged", (sender) => SectorChanged());
-            MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "ProductChanged", (sender => ProductChanged()));
         }
 
         async void Save_Clicked(object sender, EventArgs e)
         {
             if (ViewModel.HasChanged)
-                await webContainer.EvaluateJavaScriptAsync("location.reload();");
-
-            await Navigation.PopModalAsync();
-        }
-
-        async void SatelliteChanged()
-        {
-            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.sat = ""{ViewModel.CurrentSatellite.Id}"";");
-            await webContainer.EvaluateJavaScriptAsync(@"updateURL(1);");
-        }
-
-        async void SectorChanged()
-        {
-            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.sec = ""{ViewModel.CurrentSatellite.Sectors[ViewModel.SectorIndex].Id}"";");
-            await webContainer.EvaluateJavaScriptAsync(@"updateURL(0,1);");
-        }
-
-        async void ProductChanged()
-        {
-            var test = $@"url_parameters.p = {{0:{ViewModel.CurrentSatellite.Products[ViewModel.ProductIndex].Id}}}"";";
-            Debug.WriteLine(test);
-            await webContainer.EvaluateJavaScriptAsync($@"url_parameters.p = {{0:""{ViewModel.CurrentSatellite.Products[ViewModel.ProductIndex].Id}""}};");
-            await webContainer.EvaluateJavaScriptAsync(@"updateURL(0,0,1);");
-        }
-
-        async void CloseBtnClicked(System.Object sender, System.EventArgs e)
-        {
-            if(ViewModel.HasChanged)
-                await webContainer.EvaluateJavaScriptAsync("location.reload();");
+                MessagingCenter.Send(this, "OptionsChanged");
+            //await webContainer.EvaluateJavaScriptAsync("location.reload();");
 
             await Navigation.PopModalAsync();
         }

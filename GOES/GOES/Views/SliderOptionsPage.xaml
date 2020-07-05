@@ -6,10 +6,6 @@
              Title="Options"
              ios:Page.ModalPresentationStyle="FormSheet">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Close" Clicked="CloseBtnClicked" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
             <StackLayout Spacing="5">

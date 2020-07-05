@@ -1,5 +1,6 @@
 ﻿using System;
 using GOES.Models;
+using GOES.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,6 +17,11 @@ namespace GOES.Views
 
             WebContainer.Source = "http://rammb-slider.cira.colostate.edu/?sat=goes-17&z=3&im=12&ts=1&st=0&et=0&speed=130&motion=loop&map=0&lat=0&opacity%5B0%5D=1&hidden%5B0%5D=0&pause=0&slider=-1&hide_controls=1&mouse_draw=0&follow_feature=0&follow_hide=0&s=rammb-slider&sec=conus&p%5B0%5D=geocolor&x=7448.6796875&y=3745";
             WebContainer.Navigated += WebContainer_Navigated;
+
+            MessagingCenter.Subscribe<SliderOptionsPage>(this, "OptionsChanged", (sender) => OptionsChanged());
+            MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SatelliteChanged", (sender, arg) => SatelliteChanged(arg));
+            MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SectorChanged", (sender, arg) => SectorChanged(arg));
+            MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "ProductChanged", (sender, arg) => ProductChanged(arg));
         }
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)
@@ -91,6 +97,29 @@ namespace GOES.Views
         async void NextClicked(object sender, EventArgs e)
         {
             await WebContainer.EvaluateJavaScriptAsync(@"$(""#next"").button().click()");
+        }
+
+        async void OptionsChanged()
+        {
+            await WebContainer.EvaluateJavaScriptAsync("location.reload()");
+        }
+
+        async void SatelliteChanged(string satellite)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.sat = ""{satellite}""");
+            await WebContainer.EvaluateJavaScriptAsync(@"updateURL(1);");
+        }
+
+        async void SectorChanged(string sector)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.sec = ""{sector}""");
+            await WebContainer.EvaluateJavaScriptAsync(@"updateURL(0,1);");
+        }
+
+        async void ProductChanged(string product)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.p = {{0:""{product}""}};");
+            await WebContainer.EvaluateJavaScriptAsync(@"updateURL(0,0,1);");
         }
     }
 }
