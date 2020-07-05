@@ -24,25 +24,16 @@ namespace GOES.Views
         WebView webContainer;
         bool loading = true;
 
-        public SliderOptionsPage(WebView container)
+        public SliderOptionsPage(SliderOptions options)
         {
             InitializeComponent();
-            webContainer = container;
 
             ViewModel = new SliderOptionsViewModel();
+            ViewModel.LoadInitialData(options);
 
             MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SatelliteChanged", (sender) => SatelliteChanged());
             MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "SectorChanged", (sender) => SectorChanged());
             MessagingCenter.Subscribe<SliderOptionsViewModel>(this, "ProductChanged", (sender => ProductChanged()));
-        }
-
-        protected async override void OnAppearing()
-        {
-            var selectedSatellite = await webContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
-            var selectedSector = await webContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
-            var selectedProduct = await webContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
-
-            ViewModel.LoadInitialData(selectedSatellite, selectedSector, selectedProduct);
         }
 
         async void Save_Clicked(object sender, EventArgs e)

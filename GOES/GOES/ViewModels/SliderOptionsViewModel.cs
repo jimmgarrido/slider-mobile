@@ -320,15 +320,15 @@ namespace GOES.ViewModels
             HasChanged = false;
         }
 
-        public void LoadInitialData(string satellite, string sector, string product)
+        public void LoadInitialData(SliderOptions options)
         {
             isLoading = true;
 
-            CurrentSatellite = AllSatellites.Find(s => s.Id == satellite);
+            CurrentSatellite = AllSatellites.Find(s => s.Id == options.Satellite);
 
-            SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == sector));
+            SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == options.Sector));
 
-            ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == product));
+            ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == options.Product));
 
             isLoading = false;
         }
