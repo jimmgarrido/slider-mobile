@@ -10,7 +10,7 @@
         <StackLayout Spacing="20" Padding="15">
             <StackLayout Spacing="5">
                 <Label Text="Satellite"/>
-                <Picker Title="Satellite" ItemsSource="{Binding AllSatellites}" ItemDisplayBinding="{Binding Name}"
+                <Picker Title="Satellite" ItemsSource="{Binding Satellites}" ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding CurrentSatellite, Mode=TwoWay}" ios:Picker.UpdateMode="WhenFinished" />
             </StackLayout>
 
@@ -22,7 +22,7 @@
 
             <StackLayout Spacing="5">
                 <Label Text="Product"/>
-                <Picker Title="Label" ItemsSource="{Binding CurrentSatellite.Products}" ItemDisplayBinding="{Binding Name}"
+                <Picker Title="Label" ItemsSource="{Binding ValidProducts}" ItemDisplayBinding="{Binding Name}"
                         SelectedIndex="{Binding ProductIndex, Mode=TwoWay}" ios:Picker.UpdateMode="WhenFinished" />
             </StackLayout>
 

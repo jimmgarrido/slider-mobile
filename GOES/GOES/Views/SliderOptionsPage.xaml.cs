@@ -28,8 +28,7 @@ namespace GOES.Views
         {
             InitializeComponent();
 
-            ViewModel = new SliderOptionsViewModel();
-            ViewModel.LoadInitialData(options);
+            ViewModel = new SliderOptionsViewModel(options);
         }
 
         async void Save_Clicked(object sender, EventArgs e)

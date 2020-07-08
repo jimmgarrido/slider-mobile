@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using GOES.Models;
 using GOES.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+using GOES.Services;
 
 namespace GOES.Views
 {
     public partial class SliderPage : ContentPage
     {
-        int zoomLevel = 2;
-        SliderOptions options;
+        bool firstLoad = true;
 
         public SliderPage()
         {
@@ -27,18 +29,14 @@ namespace GOES.Views
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)
         {
-            var selectedSatellite = await WebContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
-            var selectedSector = await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
-            var selectedProduct = await WebContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
-            var isMapToggled = await WebContainer.EvaluateJavaScriptAsync(@"$('#mapHideShow').prop('checked')");
+            if (!firstLoad)
+                return;
 
-            options = new SliderOptions
-            {
-                Satellite = selectedSatellite,
-                Sector = selectedSector,
-                Product = selectedProduct,
-                IsMapToggled = bool.Parse(isMapToggled)
-            };
+            var productJson = await WebContainer.EvaluateJavaScriptAsync("json");
+
+            SatelliteData.LoadSatelliteData(productJson);
+
+            firstLoad = false;
         }
 
         private void ToolbarItem_Clicked(object sender, EventArgs e)
@@ -48,6 +46,8 @@ namespace GOES.Views
 
         private async void OptionsClicked(object sender, EventArgs e)
         {
+            var options = await LoadOptions();
+
             await Navigation.PushModalAsync(new SliderOptionsPage(options));
         }
 
@@ -128,6 +128,24 @@ namespace GOES.Views
         async void MapToggled(bool isEnabled)
         {
             await WebContainer.EvaluateJavaScriptAsync($@"$(""#mapHideShow"").click()");
+        }
+
+        async Task<SliderOptions> LoadOptions()
+        {
+            var selectedSatellite = await WebContainer.EvaluateJavaScriptAsync(@"$('#satelliteSelectorChange option[selected=""true""]').val();");
+            var selectedSector = await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
+            var selectedProduct = await WebContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
+            var isMapToggled = await WebContainer.EvaluateJavaScriptAsync(@"$('#mapHideShow').prop('checked')");
+            var numImages = await WebContainer.EvaluateJavaScriptAsync(@"$.map($('#numberOfImagesSelectorChange option[disabled != ""disabled""]'), function(option){return Number.parseInt(option.value);})");
+            var list = numImages.Trim(new char[] { '[', ']' }).Split(',').ToList();
+
+            return new SliderOptions
+            {
+                Satellite = selectedSatellite,
+                Sector = selectedSector,
+                Product = selectedProduct,
+                IsMapToggled = bool.Parse(isMapToggled)
+            };
         }
     }
 }

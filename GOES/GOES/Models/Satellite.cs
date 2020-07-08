@@ -26,6 +26,8 @@ namespace GOES.Models
         public string Id { get; set; }
 
         public string Name { get; set; }
+
+        public List<string> MissingProducts { get; set; }
     }
 
     public class Product
