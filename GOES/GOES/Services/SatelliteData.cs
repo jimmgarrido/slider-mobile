@@ -46,11 +46,14 @@ namespace GOES.Services
 
                     foreach (var product in productElement.EnumerateObject())
                     {
-                        products.Add(new Product
-                        {
-                            Id = product.Name,
-                            Name = WebUtility.HtmlDecode(product.Value.GetProperty("product_title").GetString())
-                        });
+                        var title = product.Value.GetProperty("product_title").GetString();
+
+                        if(!title.StartsWith("-"))
+                            products.Add(new Product
+                            {
+                                Id = product.Name,
+                                Name = WebUtility.HtmlDecode(title)
+                            });
                     }
 
                     var sat = new Satellite()
