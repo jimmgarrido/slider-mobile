@@ -41,8 +41,8 @@
             <Button Text="&lt;" Clicked="PrevClicked" Grid.Row="0" Grid.Column="0"/>
             <Button Text="Pause" Clicked="PlayPausedClicked" Grid.Row="0" Grid.Column="1"/>
             <Button Text="&gt;" Clicked="NextClicked" Grid.Row="0" Grid.Column="2"/>
-            <Button Text="+" Clicked="ZoomInClicked" Grid.Row="0" Grid.Column="4"/>
-            <Button Text="-" Clicked="ZoomOutClicked" Grid.Row="0" Grid.Column="5"/>
+            <Button Text="-" Clicked="ZoomOutClicked" Grid.Row="0" Grid.Column="4"/>
+            <Button Text="+" Clicked="ZoomInClicked" Grid.Row="0" Grid.Column="5"/>
         </Grid>
         <Grid Margin="20,10,20,5">
             <Grid.ColumnDefinitions>
