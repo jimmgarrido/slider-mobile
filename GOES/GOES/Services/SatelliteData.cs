@@ -33,6 +33,7 @@ namespace GOES.Services
                         {
                             Id = sectorElement.Name,
                             Name = sectorElement.Value.GetProperty("sector_title").GetString(),
+                            DefaultProduct = sectorElement.Value.GetProperty("default_product").GetString()
                         };
 
                         if (sectorElement.Value.TryGetProperty("missing_products", out JsonElement missingProductsElement))
@@ -56,6 +57,7 @@ namespace GOES.Services
                     {
                         Id = element.Name,
                         Name = element.Value.GetProperty("satellite_title").GetString(),
+                        DefaultSector = element.Value.GetProperty("default_sector").GetString(),
                         Sectors = sectors,
                         Products = products
                     };

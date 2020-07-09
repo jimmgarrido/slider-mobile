@@ -11,6 +11,8 @@ namespace GOES.Models
 
         public string Name { get; set; }
 
+        public string DefaultSector { get; set; }
+
         public List<Sector> Sectors { get; set; }
 
         public List<Product> Products { get; set; }
@@ -28,6 +30,8 @@ namespace GOES.Models
         public string Name { get; set; }
 
         public List<string> MissingProducts { get; set; }
+
+        public string DefaultProduct { get; set; }
     }
 
     public class Product

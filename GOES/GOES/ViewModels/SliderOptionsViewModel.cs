@@ -30,14 +30,16 @@ namespace GOES.ViewModels
                 if (value == currentSatellite)
                     return;
 
-                Debug.WriteLine($"****** {value} *****");
                 currentSatellite = value;
+                ValidProducts = CurrentSatellite.Products.Where(p => !CurrentSatellite.Sectors[sectorIndex].MissingProducts.Contains(p.Id)).ToList();
                 OnPropertyChanged();
+                //OnPropertyChanged("ValidProducts");
 
                 if (!isLoading)
                 {
                     MessagingCenter.Send(this, "SatelliteChanged", currentSatellite.Id);
-                    SectorIndex = -1;
+                    SectorIndex = CurrentSatellite.Sectors.FindIndex(s => s.Id == CurrentSatellite.DefaultSector); ;
+                    ProductIndex = ValidProducts.FindIndex(p => p.Id == CurrentSatellite.Sectors[SectorIndex].DefaultProduct);
                     HasChanged = true;
                 }
             }
@@ -61,7 +63,7 @@ namespace GOES.ViewModels
                 if (!isLoading && sectorIndex >= 0)
                 {
                     MessagingCenter.Send(this, "SectorChanged", currentSatellite.Sectors[sectorIndex].Id);
-                    //ProductIndex = -1;
+                    ProductIndex = CurrentSatellite.Products.FindIndex(p => p.Id == CurrentSatellite.Sectors[SectorIndex].DefaultProduct);
                     HasChanged = true;
                 }
             }
@@ -92,7 +94,15 @@ namespace GOES.ViewModels
         {
             get
             {
-                return CurrentSatellite.Products.Where(p => !CurrentSatellite.Sectors[sectorIndex].MissingProducts.Contains(p.Id)).ToList();
+                return validProducts;
+            }
+            set
+            {
+                if (validProducts == value)
+                    return;
+
+                validProducts = value;
+                OnPropertyChanged();
             }
         }
 
