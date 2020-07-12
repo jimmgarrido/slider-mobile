@@ -25,6 +25,7 @@ namespace GOES.Views
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SectorChanged", (sender, arg) => SectorChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "ProductChanged", (sender, arg) => ProductChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, bool>(this, "MapToggled", (sender, arg) => MapToggled(arg));
+            MessagingCenter.Subscribe<SliderOptionsViewModel, int>(this, "NumImagesChanged", (sender, arg) => NumImagesChanged(arg));
         }
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)
@@ -125,6 +126,12 @@ namespace GOES.Views
             await WebContainer.EvaluateJavaScriptAsync(@"updateURL(0,0,1);");
         }
 
+        async void NumImagesChanged(int num)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.im = {num};");
+            await WebContainer.EvaluateJavaScriptAsync(@"updateURL();");
+        }
+
         async void MapToggled(bool isEnabled)
         {
             await WebContainer.EvaluateJavaScriptAsync($@"$(""#mapHideShow"").click()");
@@ -136,15 +143,15 @@ namespace GOES.Views
             var selectedSector = await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option[selected=""true""]').val();");
             var selectedProduct = await WebContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
             var isMapToggled = await WebContainer.EvaluateJavaScriptAsync(@"$('#mapHideShow').prop('checked')");
-            var numImages = await WebContainer.EvaluateJavaScriptAsync(@"$.map($('#numberOfImagesSelectorChange option[disabled != ""disabled""]'), function(option){return Number.parseInt(option.value);})");
-            var list = numImages.Trim(new char[] { '[', ']' }).Split(',').ToList();
+            var numImages = await WebContainer.EvaluateJavaScriptAsync(@"$('#numberOfImagesSelectorChange option[selected=""true""]').val();");
 
             return new SliderOptions
             {
                 Satellite = selectedSatellite,
                 Sector = selectedSector,
                 Product = selectedProduct,
-                IsMapToggled = bool.Parse(isMapToggled)
+                IsMapToggled = bool.Parse(isMapToggled),
+                NumImages = int.Parse(numImages)
             };
         }
     }

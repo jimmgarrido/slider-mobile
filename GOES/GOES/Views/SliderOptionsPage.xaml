@@ -28,7 +28,8 @@
 
             <StackLayout Spacing="5">
                 <Label Text="Num of Images"/>
-                <Picker Title="Num of Images" ItemsSource="{Binding ImageCount}" SelectedIndex="{Binding ImageCountIndex}" />
+                <Picker Title="Num of Images" ItemsSource="{Binding NumOfImages}" SelectedIndex="{Binding NumOfImagesIndex}"
+                        ios:Picker.UpdateMode="WhenFinished"/>
             </StackLayout>
 
             <StackLayout Spacing="5">

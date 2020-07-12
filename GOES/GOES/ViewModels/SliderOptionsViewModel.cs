@@ -106,21 +106,22 @@ namespace GOES.ViewModels
             }
         }
 
-        List<int> imageCount;
-        public List<int> ImageCount { get; set; }
+        public List<int> NumOfImages {
+            get => SatelliteData.NumOfImages;
+        }
 
-        int imageCountIndex;
-        public int ImageCountIndex
+        int numOfImagesIndex;
+        public int NumOfImagesIndex
         {
-            get => imageCountIndex;
+            get => numOfImagesIndex;
             set
             {
-                imageCountIndex = value;
+                numOfImagesIndex = value;
                 OnPropertyChanged();
 
-                if (!isLoading && imageCountIndex >= 0)
+                if (!isLoading && numOfImagesIndex >= 0)
                 {
-                    MessagingCenter.Send(this, "ImageCountChanged");
+                    MessagingCenter.Send(this, "NumImagesChanged", NumOfImages[NumOfImagesIndex]);
                     HasChanged = true;
                 }
             }
@@ -146,12 +147,12 @@ namespace GOES.ViewModels
 
         public SliderOptionsViewModel(SliderOptions currentOptions)
         {
-
             isLoading = true;
 
             CurrentSatellite = Satellites.Find(s => s.Id == currentOptions.Satellite);
             SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == currentOptions.Sector));
             ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == currentOptions.Product));
+            NumOfImagesIndex = NumOfImages.IndexOf(currentOptions.NumImages);
             IsMapEnabled = currentOptions.IsMapToggled;
 
             isLoading = false;

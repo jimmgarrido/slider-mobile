@@ -32,6 +32,8 @@ namespace GOES.Models
         public List<string> MissingProducts { get; set; }
 
         public string DefaultProduct { get; set; }
+
+        public double TimestepMultiplier { get; set; }
     }
 
     public class Product

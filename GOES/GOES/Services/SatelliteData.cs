@@ -11,6 +11,10 @@ namespace GOES.Services
     {
         public static List<Satellite> Satellites { get; private set; }
 
+        public static List<int> NumOfImages = new List<int> { 6, 12, 14, 18, 24, 28, 30, 36, 42, 48, 54, 56, 60 };
+
+        static List<int> ImageSteps = new List<int> { 1, 2, 3, 4, 6, 8, 12, 24, 48, 96 };
+
         public static void LoadSatelliteData(string dataJson)
         {
             Satellites = new List<Satellite>();
@@ -35,6 +39,16 @@ namespace GOES.Services
                             Name = sectorElement.Value.GetProperty("sector_title").GetString(),
                             DefaultProduct = sectorElement.Value.GetProperty("default_product").GetString()
                         };
+
+                        //Workaround for a bug in the site's JSON where the default proeprty is mnissing from GOES-17 Meso-2 sector
+                        if (sectorElement.Value.TryGetProperty("defaults", out JsonElement sectorDefaultsElement))
+                        {
+                            sector.TimestepMultiplier = sectorDefaultsElement.GetProperty("minutes_between_images").GetDouble();
+                        }
+                        else
+                        {
+                            sector.TimestepMultiplier = 1.0;
+                        }
 
                         if (sectorElement.Value.TryGetProperty("missing_products", out JsonElement missingProductsElement))
                         {

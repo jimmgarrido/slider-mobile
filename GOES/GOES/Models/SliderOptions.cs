@@ -12,6 +12,8 @@ namespace GOES.Models
 
         public bool IsMapToggled { get; set; }
 
+        public int NumImages { get; set; }
+
         public SliderOptions()
         {
         }
