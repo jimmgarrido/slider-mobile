@@ -13,7 +13,7 @@ namespace GOES.Services
 
         public static List<int> NumOfImages = new List<int> { 6, 12, 14, 18, 24, 28, 30, 36, 42, 48, 54, 56, 60 };
 
-        static List<int> ImageSteps = new List<int> { 1, 2, 3, 4, 6, 8, 12, 24, 48, 96 };
+        public static List<int> TimeSteps = new List<int> { 1, 2, 3, 4, 6, 8, 12, 24, 48, 96 };
 
         public static void LoadSatelliteData(string dataJson)
         {

@@ -26,6 +26,7 @@ namespace GOES.Views
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "ProductChanged", (sender, arg) => ProductChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, bool>(this, "MapToggled", (sender, arg) => MapToggled(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, int>(this, "NumImagesChanged", (sender, arg) => NumImagesChanged(arg));
+            MessagingCenter.Subscribe<SliderOptionsViewModel, int>(this, "TimeStepChanged", (sender, arg) => TimeStepChanged(arg));
         }
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)
@@ -132,6 +133,12 @@ namespace GOES.Views
             await WebContainer.EvaluateJavaScriptAsync(@"updateURL();");
         }
 
+        async void TimeStepChanged(int step)
+        {
+            await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.ts = {step};");
+            await WebContainer.EvaluateJavaScriptAsync(@"updateURL();");
+        }
+
         async void MapToggled(bool isEnabled)
         {
             await WebContainer.EvaluateJavaScriptAsync($@"$(""#mapHideShow"").click()");
@@ -144,6 +151,7 @@ namespace GOES.Views
             var selectedProduct = await WebContainer.EvaluateJavaScriptAsync(@"$('#productSelectorChange option[selected=""true""]').val();");
             var isMapToggled = await WebContainer.EvaluateJavaScriptAsync(@"$('#mapHideShow').prop('checked')");
             var numImages = await WebContainer.EvaluateJavaScriptAsync(@"$('#numberOfImagesSelectorChange option[selected=""true""]').val();");
+            var timeStep = await WebContainer.EvaluateJavaScriptAsync(@"$('#timeStepSelectorChange option[selected=""true""]').val();");
 
             return new SliderOptions
             {
@@ -151,7 +159,8 @@ namespace GOES.Views
                 Sector = selectedSector,
                 Product = selectedProduct,
                 IsMapToggled = bool.Parse(isMapToggled),
-                NumImages = int.Parse(numImages)
+                NumImages = int.Parse(numImages),
+                TimeStep = int.Parse(timeStep)
             };
         }
     }

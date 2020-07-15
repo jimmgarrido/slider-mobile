@@ -14,6 +14,8 @@ namespace GOES.Models
 
         public int NumImages { get; set; }
 
+        public int TimeStep { get; set; }
+
         public SliderOptions()
         {
         }

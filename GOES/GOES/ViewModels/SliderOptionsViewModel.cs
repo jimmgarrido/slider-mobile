@@ -45,6 +45,12 @@ namespace GOES.ViewModels
             }
         }
 
+        Sector currentSector;
+        public Sector CurrentSector
+        {
+            get => CurrentSatellite.Sectors[SectorIndex];
+        }
+
         int sectorIndex;
         public int SectorIndex
         {
@@ -59,6 +65,8 @@ namespace GOES.ViewModels
 
                 sectorIndex = value;
                 OnPropertyChanged();
+                OnPropertyChanged("TimeSteps");
+                OnPropertyChanged("TimeStepIndex");
 
                 if (!isLoading && sectorIndex >= 0)
                 {
@@ -127,6 +135,31 @@ namespace GOES.ViewModels
             }
         }
 
+        public List<string> TimeSteps
+        {
+            get => SatelliteData.TimeSteps.Select(t => $"{t * CurrentSatellite.Sectors[SectorIndex].TimestepMultiplier} min").ToList();
+        }
+
+        int timeStepIndex;
+        public int TimeStepIndex
+        {
+            get => timeStepIndex;
+            set
+            {
+                if (timeStepIndex == value)
+                    return;
+
+                timeStepIndex = value;
+                OnPropertyChanged();
+
+                if (!isLoading && TimeStepIndex >= 0)
+                {
+                    MessagingCenter.Send(this, "TimeStepChanged", SatelliteData.TimeSteps[TimeStepIndex]);
+                    HasChanged = true;
+                }
+            }
+        }
+
         bool isMapEnabled;
         public bool IsMapEnabled
         {
@@ -153,6 +186,7 @@ namespace GOES.ViewModels
             SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == currentOptions.Sector));
             ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == currentOptions.Product));
             NumOfImagesIndex = NumOfImages.IndexOf(currentOptions.NumImages);
+            TimeStepIndex = SatelliteData.TimeSteps.IndexOf(currentOptions.TimeStep);
             IsMapEnabled = currentOptions.IsMapToggled;
 
             isLoading = false;
