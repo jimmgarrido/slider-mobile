@@ -54,17 +54,26 @@ namespace GOES.ViewModels
                 sectorIndex = value;
                 OnPropertyChanged();
 
-                ValidProducts = CurrentSatellite.Products.Where(p => !CurrentSatellite.Sectors[sectorIndex].MissingProducts.Contains(p.Id)).ToList();
-                ProductIndex = ValidProducts.FindIndex(p => p.Id == CurrentSatellite.Sectors[sectorIndex].DefaultProduct);
-
-                var tempIndex = TimeStepIndex;
-                TimeSteps = SatelliteData.TimeSteps.Select(t => $"{t * CurrentSatellite.Sectors[SectorIndex].TimestepMultiplier} min").ToList();
-                TimeStepIndex = tempIndex;
-
-                if (!isLoading && sectorIndex >= 0)
+                if (sectorIndex >= 0)
                 {
-                    MessagingCenter.Send(this, "SectorChanged", currentSatellite.Sectors[sectorIndex].Id);
-                    HasChanged = true;
+                    var missingProducts = CurrentSatellite.Sectors[sectorIndex].MissingProducts;
+
+                    ValidProducts = missingProducts != null ?
+                        CurrentSatellite.Products.Where(p => !missingProducts.Contains(p.Id)).ToList() :
+                        CurrentSatellite.Products;
+
+                    ProductIndex = ValidProducts.FindIndex(p => p.Id == CurrentSatellite.Sectors[sectorIndex].DefaultProduct);
+
+                    var tempIndex = TimeStepIndex;
+                    TimeSteps = SatelliteData.TimeSteps.Select(t => $"{t * CurrentSatellite.Sectors[sectorIndex].TimestepMultiplier} min").ToList();
+                    TimeStepIndex = tempIndex;
+
+
+                    if (!isLoading)
+                    {
+                        MessagingCenter.Send(this, "SectorChanged", currentSatellite.Sectors[sectorIndex].Id);
+                        HasChanged = true;
+                    }
                 }
             }
         }
