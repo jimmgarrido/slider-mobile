@@ -12,35 +12,26 @@ namespace GOES.ViewModels
     {
         public List<Satellite> Satellites
         {
-            get
-            {
-                return SatelliteData.Satellites;
-            }
+            get => SatelliteData.Satellites;
         }
 
         Satellite currentSatellite;
         public Satellite CurrentSatellite
         {
-            get
-            {
-                return currentSatellite;
-            }
+            get => currentSatellite;
             set
             {
                 if (value == currentSatellite)
                     return;
 
                 currentSatellite = value;
-                ValidProducts = CurrentSatellite.Products.Where(p => !CurrentSatellite.Sectors[sectorIndex].MissingProducts.Contains(p.Id)).ToList();
                 OnPropertyChanged();
-                //OnPropertyChanged("ValidProducts");
+                SectorIndex = CurrentSatellite.Sectors.FindIndex(s => s.Id == CurrentSatellite.DefaultSector); ;
 
                 if (!isLoading)
                 {
-                    MessagingCenter.Send(this, "SatelliteChanged", currentSatellite.Id);
-                    SectorIndex = CurrentSatellite.Sectors.FindIndex(s => s.Id == CurrentSatellite.DefaultSector); ;
-                    ProductIndex = ValidProducts.FindIndex(p => p.Id == CurrentSatellite.Sectors[SectorIndex].DefaultProduct);
                     HasChanged = true;
+                    MessagingCenter.Send(this, "SatelliteChanged", currentSatellite.Id);
                 }
             }
         }
@@ -51,13 +42,10 @@ namespace GOES.ViewModels
             get => CurrentSatellite.Sectors[SectorIndex];
         }
 
-        int sectorIndex;
+        int sectorIndex = -1;
         public int SectorIndex
         {
-            get
-            {
-                return sectorIndex;
-            }
+            get => sectorIndex;
             set
             {
                 if (value == sectorIndex)
@@ -65,27 +53,31 @@ namespace GOES.ViewModels
 
                 sectorIndex = value;
                 OnPropertyChanged();
-                OnPropertyChanged("TimeSteps");
-                OnPropertyChanged("TimeStepIndex");
+
+                ValidProducts = CurrentSatellite.Products.Where(p => !CurrentSatellite.Sectors[sectorIndex].MissingProducts.Contains(p.Id)).ToList();
+                ProductIndex = ValidProducts.FindIndex(p => p.Id == CurrentSatellite.Sectors[sectorIndex].DefaultProduct);
+
+                var tempIndex = TimeStepIndex;
+                TimeSteps = SatelliteData.TimeSteps.Select(t => $"{t * CurrentSatellite.Sectors[SectorIndex].TimestepMultiplier} min").ToList();
+                TimeStepIndex = tempIndex;
 
                 if (!isLoading && sectorIndex >= 0)
                 {
                     MessagingCenter.Send(this, "SectorChanged", currentSatellite.Sectors[sectorIndex].Id);
-                    ProductIndex = CurrentSatellite.Products.FindIndex(p => p.Id == CurrentSatellite.Sectors[SectorIndex].DefaultProduct);
                     HasChanged = true;
                 }
             }
         }
 
-        int productIndex;
+        int productIndex = -1;
         public int ProductIndex
         {
-            get
-            {
-                return productIndex;
-            }
+            get => productIndex;
             set
             {
+                if (value == productIndex)
+                    return;
+
                 productIndex = value;
                 OnPropertyChanged();
 
@@ -118,7 +110,7 @@ namespace GOES.ViewModels
             get => SatelliteData.NumOfImages;
         }
 
-        int numOfImagesIndex;
+        int numOfImagesIndex = -1;
         public int NumOfImagesIndex
         {
             get => numOfImagesIndex;
@@ -135,12 +127,21 @@ namespace GOES.ViewModels
             }
         }
 
+        List<string> timeSteps;
         public List<string> TimeSteps
         {
-            get => SatelliteData.TimeSteps.Select(t => $"{t * CurrentSatellite.Sectors[SectorIndex].TimestepMultiplier} min").ToList();
+            get => timeSteps;
+            set
+            {
+                if (value == timeSteps)
+                    return;
+
+                timeSteps = value;
+                OnPropertyChanged();
+            }
         }
 
-        int timeStepIndex;
+        int timeStepIndex = -1;
         public int TimeStepIndex
         {
             get => timeStepIndex;
@@ -178,7 +179,9 @@ namespace GOES.ViewModels
 
         bool isLoading = true;
 
-        public SliderOptionsViewModel(SliderOptions currentOptions)
+        public SliderOptionsViewModel() { }
+
+        public void Init(SliderOptions currentOptions)
         {
             isLoading = true;
 
@@ -191,40 +194,6 @@ namespace GOES.ViewModels
 
             isLoading = false;
             HasChanged = false;
-        }
-
-        //public void LoadInitialData(SliderOptions options)
-        //{
-        //    isLoading = true;
-
-        //    CurrentSatellite = SatelliteData.Find(s => s.Id == options.Satellite);
-
-        //    SectorIndex = CurrentSatellite.Sectors.IndexOf(CurrentSatellite.Sectors.Find(s => s.Id == options.Sector));
-
-        //    ProductIndex = CurrentSatellite.Products.IndexOf(CurrentSatellite.Products.Find(s => s.Id == options.Product));
-
-        //    IsMapEnabled = options.IsMapToggled;
-
-        //    isLoading = false;
-        //}
-
-        void SatelliteChanged()
-        {
-            //var select = ViewModel.Satellites[ViewModel.SatelliteIndex];
-            //var sat = ViewModel.AllSatellites.First(s => s.Value == select).Key;
-
-            //await WebContainer.EvaluateJavaScriptAsync($@"url_parameters.sat = ""{sat}"";");
-            //await WebContainer.EvaluateJavaScriptAsync(@"updateURL(1);");
-            //await WebContainer.EvaluateJavaScriptAsync(@"$('#sectorSelectorChange option').remove();");
-            //await WebContainer.EvaluateJavaScriptAsync(@"$.each(json.satellites[url_parameters.sat].sectors, function(e, t) {e != url_parameters.sec ? $(""#sectorSelectorChange"").append(""<option value='"" + e + ""'>"" + t.sector_title + ""</option>"") : $(""#sectorSelectorChange"").append("" <option selected='true' value='"" + e + ""'>"" + t.sector_title + ""</option>"")});");
-            //var test = await WebContainer.EvaluateJavaScriptAsync(@"$(""#sectorSelectorChange>option"").map(function() { return $(this).val(); }).get();");
-            //Debug.WriteLine(test);
-
-            //test.Replace('[', '{');
-            //test.Replace(']', '}');
-
-            //var sats = JsonConvert.DeserializeObject<List<string>>(test);
-            //ViewModel.Sectors = sats;
         }
 
     }

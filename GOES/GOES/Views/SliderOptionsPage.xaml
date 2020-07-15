@@ -2,9 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:vm="clr-namespace:GOES.ViewModels"
              x:Class="GOES.Views.SliderOptionsPage"
              Title="Options"
              ios:Page.ModalPresentationStyle="FormSheet">
+
+    <ContentPage.BindingContext>
+        <vm:SliderOptionsViewModel />
+    </ContentPage.BindingContext>
 
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">

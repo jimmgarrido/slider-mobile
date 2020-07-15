@@ -15,20 +15,15 @@ namespace GOES.Views
 {
     public partial class SliderOptionsPage : ContentPage
     {
-        SliderOptionsViewModel ViewModel
-        {
-            get => BindingContext as SliderOptionsViewModel;
-            set => BindingContext = value;
-        }
+        SliderOptionsViewModel ViewModel => BindingContext as SliderOptionsViewModel;
 
-        WebView webContainer;
         bool loading = true;
 
         public SliderOptionsPage(SliderOptions options)
         {
             InitializeComponent();
 
-            ViewModel = new SliderOptionsViewModel(options);
+            ViewModel.Init(options);
         }
 
         async void Save_Clicked(object sender, EventArgs e)
