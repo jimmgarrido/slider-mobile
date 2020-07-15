@@ -13,6 +13,8 @@ namespace GOES.Views
     {
         bool firstLoad = true;
 
+        SliderPageViewModel ViewModel => BindingContext as SliderPageViewModel;
+
         public SliderPage()
         {
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace GOES.Views
 
             var productJson = await WebContainer.EvaluateJavaScriptAsync("json");
 
-            SatelliteData.LoadSatelliteData(productJson);
+            ViewModel.LoadSatelliteData(productJson);
 
             firstLoad = false;
         }
@@ -55,30 +57,11 @@ namespace GOES.Views
 
         async void ZoomOutClicked(object sender, EventArgs e)
         {
-            //if(zoomLevel - 1 < 0)
-            //{
-            //    await DisplayAlert("", "Cannot zoom out further", "Okay");
-            //}
-            //else
-            //{
-            //    zoomLevel--;
-            //    await WebContainer.EvaluateJavaScriptAsync("zoomOut($(window).width() / 2, $(window).height() / 2)");
-            //}
             await WebContainer.EvaluateJavaScriptAsync("zoomOut($(window).width() / 2, $(window).height() / 2)");
-
         }
 
         async void ZoomInClicked(object sender, EventArgs e)
         {
-            //if (zoomLevel + 1 > 2)
-            //{
-            //    await DisplayAlert("", "Cannot zoom in more", "Okay");
-            //}
-            //else
-            //{
-            //    zoomLevel++;
-            //    await WebContainer.EvaluateJavaScriptAsync("zoomIn($(window).width() / 2, $(window).height() / 2)");
-            //}
             await WebContainer.EvaluateJavaScriptAsync("zoomIn($(window).width() / 2, $(window).height() / 2)");
         }
 
