@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GOES.Models;
 using GOES.ViewModels;
 using Xamarin.Forms;
-using GOES.Services;
+using GOES.Data;
 
 namespace GOES.Views
 {

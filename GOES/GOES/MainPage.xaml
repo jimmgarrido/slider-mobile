@@ -4,11 +4,6 @@
             xmlns:views="using:GOES.Views"
              x:Class="GOES.MainPage">
     <TabbedPage.Children>
-        <NavigationPage Title="Image">
-            <x:Arguments>
-                <views:StaticImagePage/>
-            </x:Arguments>
-        </NavigationPage>
         <NavigationPage Title="Slider">
             <x:Arguments>
                 <views:SliderPage />

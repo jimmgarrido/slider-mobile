@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 using GOES.Models;
-using GOES.Services;
+using GOES.Data;
 
 namespace GOES.ViewModels
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using GOES.Services;
+using GOES.Data;
 
 namespace GOES.ViewModels
 {

@@ -5,7 +5,7 @@ using System.Net;
 using System.Text.Json;
 using GOES.Models;
 
-namespace GOES.Services
+namespace GOES.Data
 {
     public class SatelliteData
     {

@@ -1,8 +1,7 @@
 ﻿using GOES.Models;
-using GOES.Services;
+using GOES.Data;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -34,12 +33,6 @@ namespace GOES.ViewModels
                     MessagingCenter.Send(this, "SatelliteChanged", currentSatellite.Id);
                 }
             }
-        }
-
-        Sector currentSector;
-        public Sector CurrentSector
-        {
-            get => CurrentSatellite.Sectors[SectorIndex];
         }
 
         int sectorIndex = -1;
