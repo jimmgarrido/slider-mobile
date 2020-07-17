@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using GOES.Models;
 using GOES.ViewModels;
 using Xamarin.Forms;
-using GOES.Data;
+using Xamarin.Essentials;
 
 namespace GOES.Views
 {
@@ -21,6 +19,18 @@ namespace GOES.Views
 
             WebContainer.Source = "http://rammb-slider.cira.colostate.edu/?sat=goes-17&z=3&im=12&ts=1&st=0&et=0&speed=130&motion=loop&map=0&lat=0&opacity%5B0%5D=1&hidden%5B0%5D=0&pause=0&slider=-1&hide_controls=1&mouse_draw=0&follow_feature=0&follow_hide=0&s=rammb-slider&sec=conus&p%5B0%5D=geocolor&x=7448.6796875&y=3745";
             WebContainer.Navigated += WebContainer_Navigated;
+            DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
+
+            if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
+            {
+                LandscapeGrid.IsVisible = true;
+                PortraitGrid.IsVisible = false;
+            }
+            else
+            {
+                LandscapeGrid.IsVisible = false;
+                PortraitGrid.IsVisible = true;
+            }
 
             MessagingCenter.Subscribe<SliderOptionsPage>(this, "OptionsChanged", (sender) => OptionsChanged());
             MessagingCenter.Subscribe<SliderOptionsViewModel, string>(this, "SatelliteChanged", (sender, arg) => SatelliteChanged(arg));
@@ -29,6 +39,20 @@ namespace GOES.Views
             MessagingCenter.Subscribe<SliderOptionsViewModel, bool>(this, "MapToggled", (sender, arg) => MapToggled(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, int>(this, "NumImagesChanged", (sender, arg) => NumImagesChanged(arg));
             MessagingCenter.Subscribe<SliderOptionsViewModel, int>(this, "TimeStepChanged", (sender, arg) => TimeStepChanged(arg));
+        }
+
+        private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+        {
+            if(e.DisplayInfo.Orientation == DisplayOrientation.Landscape)
+            {
+                LandscapeGrid.IsVisible = true;
+                PortraitGrid.IsVisible = false;
+            }
+            else
+            {
+                LandscapeGrid.IsVisible = false;
+                PortraitGrid.IsVisible = true;
+            }
         }
 
         private async void WebContainer_Navigated(object sender, WebNavigatedEventArgs e)

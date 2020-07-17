@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using Xamarin.Forms;
+using Xamarin.Essentials;
 using GOES.Models;
 using GOES.ViewModels;
 
@@ -17,6 +15,32 @@ namespace GOES.Views
             InitializeComponent();
 
             ViewModel.Init(options);
+            DeviceDisplay.MainDisplayInfoChanged += DeviceDisplay_MainDisplayInfoChanged;
+
+            if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
+            {
+                LandscapeLayout.IsVisible = true;
+                PortraitLayout.IsVisible = false;
+            }
+            else
+            {
+                LandscapeLayout.IsVisible = false;
+                PortraitLayout.IsVisible = true;
+            }
+        }
+
+        private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+        {
+            if (e.DisplayInfo.Orientation == DisplayOrientation.Landscape)
+            {
+                LandscapeLayout.IsVisible = true;
+                PortraitLayout.IsVisible = false;
+            }
+            else
+            {
+                LandscapeLayout.IsVisible = false;
+                PortraitLayout.IsVisible = true;
+            }
         }
 
         async void Save_Clicked(object sender, EventArgs e)
