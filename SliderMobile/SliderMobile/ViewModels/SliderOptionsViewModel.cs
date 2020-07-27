@@ -170,7 +170,6 @@ namespace SliderMobile.ViewModels
             set
             {
                 isMapEnabled = value;
-                OnPropertyChanged();
 
                 if(!isLoading)
                     MessagingCenter.Send(this, "MapToggled", isMapEnabled);
