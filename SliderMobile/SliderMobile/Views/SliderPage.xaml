@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             x:Class="SliderMobile.Views.SliderPage"
+             xmlns:vm="clr-namespace:SliderMobile.ViewModels"
+             ios:Page.UseSafeArea="true"
+             Title="RAMMB Slider">
+    
+    <ContentPage.BindingContext>
+        <vm:SliderPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Refresh" Clicked="ToolbarItem_Clicked"/>
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <WebView x:Name="WebContainer" Grid.Row="0"/>
+
+        <Grid Grid.Row="1" x:Name="PortraitGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="&lt;" Clicked="PrevClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="1"/>
+            <Button Text="Pause" Clicked="PlayPausedClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="2"/>
+            <Button Text="&gt;" Clicked="NextClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="3"/>
+            <Button Text="-" Clicked="ZoomOutClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="5"/>
+            <Button Text="+" Clicked="ZoomInClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="6"/>
+
+            <Button Text="Options" Clicked="OptionsClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" />
+
+        </Grid>
+
+        <Grid Grid.Row="1" x:Name="LandscapeGrid" IsVisible="false">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="&lt;" Clicked="PrevClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="0"/>
+            <Button Text="Pause" Clicked="PlayPausedClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="1"/>
+            <Button Text="&gt;" Clicked="NextClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="2"/>
+            <Button Text="-" Clicked="ZoomOutClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="4"/>
+            <Button Text="+" Clicked="ZoomInClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="5"/>
+            <Button Text="Options" Clicked="OptionsClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="7" />
+
+        </Grid>
+    </Grid>
+    <!--<StackLayout>
+        <WebView x:Name="WebContainer" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+
+        <Grid Margin="20,10,20,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Button Text="&lt;" Clicked="PrevClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="0"/>
+            <Button Text="Pause" Clicked="PlayPausedClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="1"/>
+            <Button Text="&gt;" Clicked="NextClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="2"/>
+            <Button Text="-" Clicked="ZoomOutClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="4"/>
+            <Button Text="+" Clicked="ZoomInClicked" IsEnabled="{Binding IsLoaded}" Grid.Row="0" Grid.Column="5"/>
+        </Grid>
+
+        <Grid Margin="20,10,20,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Options" Clicked="OptionsClicked" IsEnabled="{Binding IsLoaded}" Grid.ColumnSpan="5" />
+        </Grid>
+    </StackLayout>-->
+</ContentPage>
