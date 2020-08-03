@@ -98,7 +98,7 @@
                 </StackLayout>
             </Grid>
 
-            <Button Text="Close" Clicked="Save_Clicked" VerticalOptions="EndAndExpand" BackgroundColor="LightGray"/>
+            <Button Text="Close" Clicked="Save_Clicked" VerticalOptions="EndAndExpand" />
         </StackLayout>
     </ContentPage.Content>
     
